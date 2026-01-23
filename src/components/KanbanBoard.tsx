@@ -19,7 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 import { Task, TaskStatus, STATUS_CONFIG } from '../types';
-import { format, parseISO, isPast, isToday } from 'date-fns';
+import { format, parseISO, isPast } from 'date-fns';
 
 // Kanban Column Configuration
 const KANBAN_COLUMNS: { status: TaskStatus; title: string; icon: string }[] = [
@@ -65,8 +65,7 @@ function SortableTaskCard({ task, onClick }: { task: Task; onClick: () => void }
     const creator = users.find(u => u.id === task.createdBy);
     const isOverdue = task.dueDate ? isPast(parseISO(task.dueDate)) && task.status !== 'done' : false;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const isDueToday = task.dueDate ? isToday(parseISO(task.dueDate)) : false;
+
 
     return (
         <div

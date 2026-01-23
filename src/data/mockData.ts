@@ -3,12 +3,12 @@ import { User, Task } from '../types';
 // 초기 사용자 데이터 (기획팀 2명, 개발팀 3명)
 export const initialUsers: User[] = [
     // 기획팀
-    { id: 'planner-1', name: '장은주', role: 'planner' },
-    { id: 'planner-2', name: '지성제', role: 'planner' },
+    { id: 'planner-1', name: '장은주', role: 'planner', avatar: '/avatars/planner-1.png' },
+    { id: 'planner-2', name: '지성제', role: 'planner', avatar: '/avatars/planner-2.png' },
     // 개발팀
-    { id: 'dev-1', name: '오남규', role: 'developer' },
-    { id: 'dev-2', name: '진형국', role: 'developer' },
-    { id: 'dev-3', name: '허무송', role: 'developer' },
+    { id: 'dev-1', name: '오남규', role: 'developer', avatar: '/avatars/dev-1.png' },
+    { id: 'dev-2', name: '진형국', role: 'developer', avatar: '/avatars/dev-2.png' },
+    { id: 'dev-3', name: '허무송', role: 'developer', avatar: '/avatars/dev-3.png' },
 ];
 
 // 초기 업무 데이터 (데모용)

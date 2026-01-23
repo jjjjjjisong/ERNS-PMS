@@ -120,7 +120,7 @@ export const useTaskStore = create<TaskStore>()(
             },
 
             subscribeToRealtime: () => {
-                const subscription = supabase
+                supabase
                     .channel('public:db_changes')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, (payload) => {
                         const { old, new: newTask, eventType } = payload;
