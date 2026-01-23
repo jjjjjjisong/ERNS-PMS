@@ -3,7 +3,7 @@ import { useTaskStore } from '../store/useTaskStore';
 import { Task, TaskStatus, STATUS_CONFIG } from '../types';
 
 export function TaskModal() {
-    const { isModalOpen, closeModal, selectedTask, addTask, updateTask, users, getDevelopers } = useTaskStore();
+    const { isModalOpen, closeModal, selectedTask, addTask, updateTask, deleteTask, users, getDevelopers } = useTaskStore();
     const developers = getDevelopers();
     const planners = users.filter(u => u.role === 'planner');
 
@@ -240,13 +240,29 @@ export function TaskModal() {
                     )}
 
                     {/* Actions */}
-                    <div className="flex justify-end gap-3 pt-5 border-t border-surface-200">
-                        <button type="button" onClick={closeModal} className="btn-secondary">
-                            취소
-                        </button>
-                        <button type="submit" className="btn-primary">
-                            {selectedTask ? '수정하기' : '생성하기'}
-                        </button>
+                    <div className="flex justify-between md:justify-end gap-3 pt-5 border-t border-surface-200">
+                        {selectedTask && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (confirm('정말로 이 업무를 삭제하시겠습니까?')) {
+                                        deleteTask(selectedTask.id);
+                                        closeModal();
+                                    }
+                                }}
+                                className="mr-auto text-red-500 hover:text-red-700 hover:bg-red-50 px-4 py-2 rounded-lg transition-colors"
+                            >
+                                삭제
+                            </button>
+                        )}
+                        <div className="flex gap-3">
+                            <button type="button" onClick={closeModal} className="btn-secondary">
+                                취소
+                            </button>
+                            <button type="submit" className="btn-primary">
+                                {selectedTask ? '수정하기' : '생성하기'}
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -248,6 +248,29 @@ export const useTaskStore = create<TaskStore>()(
             },
 
             deleteUser: async (id) => {
+                // 1. Unassign tasks assigned to this user
+                const { error: assigneeError } = await supabase
+                    .from('tasks')
+                    .update({ assignee_id: null })
+                    .eq('assignee_id', id);
+
+                if (assigneeError) {
+                    console.error('Error unassigning tasks:', assigneeError);
+                    return;
+                }
+
+                // 2. Unassign tasks created by this user
+                const { error: creatorError } = await supabase
+                    .from('tasks')
+                    .update({ created_by: null })
+                    .eq('created_by', id);
+
+                if (creatorError) {
+                    console.error('Error unassigning created tasks:', creatorError);
+                    return;
+                }
+
+                // 3. Delete the user
                 const { error } = await supabase.from('users').delete().eq('id', id);
                 if (error) {
                     console.error('Error deleting user:', error);
