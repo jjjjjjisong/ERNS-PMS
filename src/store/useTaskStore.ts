@@ -126,6 +126,10 @@ export const useTaskStore = create<TaskStore>()(
                         const { old, new: newTask, eventType } = payload;
                         set((state) => {
                             if (eventType === 'INSERT') {
+                                // Prevent duplicate entry if already added by local optimistic update
+                                if (state.tasks.some(t => t.id === newTask.id)) {
+                                    return state;
+                                }
                                 return { tasks: [...state.tasks, mapTaskFromDb(newTask)] };
                             } else if (eventType === 'UPDATE') {
                                 return {
@@ -143,6 +147,10 @@ export const useTaskStore = create<TaskStore>()(
                         const { old, new: newUser, eventType } = payload;
                         set((state) => {
                             if (eventType === 'INSERT') {
+                                // Prevent duplicate entry if already added by local optimistic update
+                                if (state.users.some(u => u.id === newUser.id)) {
+                                    return state;
+                                }
                                 return { users: [...state.users, mapUserFromDb(newUser)] };
                             } else if (eventType === 'UPDATE') {
                                 return {
