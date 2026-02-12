@@ -191,12 +191,19 @@ export const useTaskStore = create<TaskStore>()(
                     due_date: taskData.dueDate || null,
                 };
 
-                const { error } = await supabase.from('tasks').insert(dbTask);
+                const { data, error } = await supabase.from('tasks').insert(dbTask).select().single();
                 if (error) {
                     console.error('Error adding task:', error);
                     return;
                 }
-                // Realtime subscription will handle adding the task to local state
+                if (data) {
+                    const newTask = mapTaskFromDb(data);
+                    set((state) => ({
+                        tasks: state.tasks.some(t => t.id === newTask.id)
+                            ? state.tasks
+                            : [...state.tasks, newTask]
+                    }));
+                }
             },
 
             updateTask: async (id, updates) => {
@@ -237,12 +244,19 @@ export const useTaskStore = create<TaskStore>()(
                     role: userData.role,
                     avatar: '/avatars/default.png',
                 };
-                const { error } = await supabase.from('users').insert(dbUser);
+                const { data, error } = await supabase.from('users').insert(dbUser).select().single();
                 if (error) {
                     console.error('Error adding user:', error);
                     return;
                 }
-                // Realtime subscription will handle adding the user to local state
+                if (data) {
+                    const newUser = mapUserFromDb(data);
+                    set((state) => ({
+                        users: state.users.some(u => u.id === newUser.id)
+                            ? state.users
+                            : [...state.users, newUser]
+                    }));
+                }
             },
 
             deleteUser: async (id) => {
