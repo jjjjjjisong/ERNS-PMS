@@ -120,6 +120,10 @@ export const useTaskStore = create<TaskStore>()(
             },
 
             subscribeToRealtime: () => {
+                // Remove any existing channels first to prevent duplicate subscriptions
+                // (React StrictMode double-mounts in development)
+                supabase.removeAllChannels();
+
                 supabase
                     .channel('public:db_changes')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, (payload) => {
